@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Login form</title>
+    <meta charset="utf-8" />
+    <style>
+      input {
+        display: block;
+      }
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <main-thing />
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      let app = Vue.createApp({});
+      app.component("main-thing", {
+        template: `
+            <div>
+              <form @submit.prevent="handleSubmit">
+                <custom-input v-model:inputData="usernameText" :labelText="username" />
+                <custom-input v-model:inputData="passText" :labelText="pass" />
+                <button action="submit">Submit</button>
+              </form>
+            </div>
+        `,
+        data: function () {
+          return {
+            username: "Username",
+            pass: "Password",
+            usernameText: "",
+            passText: "",
+          };
+        },
+        methods: {
+          handleSubmit() {
+            console.log(this.usernameText, this.passText);
+          },
+        },
+      });
+      app.component("custom-input", {
+        template: `
+            <label>
+              {{ labelText }}
+              <input type="text" v-model="modelValue"/>
+            </label>
+        `,
+        props: ["labelText", "inputData"],
+        computed: {
+          modelValue: {
+            get() {
+              return this.inputData;
+            },
+            set(value) {
+              this.$emit("update:inputData", value);
+            },
+          },
+        },
+      });
+      app.mount("#app");
+    </script>
+  </body>
+</html>
